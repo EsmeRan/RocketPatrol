@@ -7,14 +7,15 @@ let config = {
     scene: [Menu, Play]
 }
 
+let keyF, keyR, keyLEFT, keyRIGHT;
+
 let borderUISize = config.height / 15;
 let borderPadding = borderUISize / 3;
 
 
 let game =  new Phaser.Game(config);
 
-// look at the lecture recording for the github stuffs
-// figure out what's wrong with the image thing
+// revisit how to make the images in vs at home to make a 'rocket' image
 
 
 
