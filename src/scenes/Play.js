@@ -7,6 +7,8 @@ class Play extends Phaser.Scene {
         this.load.image('starField', 'assets/starField.png')
         this.load.image('rocket', 'assets/rocket.png')
         this.load.image('ship', 'assets/ship.png')
+        this.load.spritesheet('explosion', 'assets/explosion.png', 
+        {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
 
     create(){
@@ -33,6 +35,11 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
     
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 9, first: 0}),
+            frameRate: 30
+        });
         
     }
 
@@ -53,6 +60,49 @@ class Play extends Phaser.Scene {
         this.shipB.update();
         this.shipC.update();
 
-        this.p1Rocket.update()
+        this.p1Rocket.update();
+
+        // check collisions
+        if (this.checkCollision(this.p1Rocket, this.shipA)){
+            this.p1Rocket.reset();
+            this.shipExplode(this.shipA);
+        }
+        if (this.checkCollision(this.p1Rocket, this.shipB)){
+            this.p1Rocket.reset();
+            this.shipExplode(this.shipB);
+        }
+        if (this.checkCollision(this.p1Rocket, this.shipC)){
+            this.p1Rocket.reset();
+            this.shipExplode(this.shipC);
+        }
     }
+
+    checkCollision(rocket, ship){
+        // simple AABB check
+        if (rocket.x < ship.x + ship.width &&
+            rocket.x + rocket.width > ship.x &&
+            rocket.y < ship.y + ship.height &&
+            rocket.height + rocket.y > ship.y){
+                return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    shipExplode(ship){
+        //hide ship
+        ship.alpha = 0;
+
+        //make explosion at ship location
+        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+        boom.anims.play('explode');
+        boom.on('animationcomplete', () => {
+            ship.reset();
+            ship.alpha = 1;
+            boom.destroy();
+        });
+
+    }
+
 }
