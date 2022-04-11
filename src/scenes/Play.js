@@ -58,16 +58,33 @@ class Play extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
         
+        this.gameOver = false;
+
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(60000, () => {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
         }, null, this);
 
     }
 
     update(){
+        // restart
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)){
+            this.scene.restart();
+        }
+
         this.bg.tilePositionX -= 4;
+
+        if (!this.gameOver){
+            this.shipA.update();
+            this.shipB.update();
+            this.shipC.update();
+            this.p1Rocket.update();
+        }
+
+        // keyboard controls
         const movementSpeed = 4;
         if(keyLEFT.isDown){
             this.p1Rocket.x -= movementSpeed;
@@ -78,12 +95,7 @@ class Play extends Phaser.Scene {
         if(Phaser.Input.Keyboard.JustDown(keyF)){
             this.p1Rocket.firing = true;
         }
-
-        this.shipA.update();
-        this.shipB.update();
-        this.shipC.update();
-
-        this.p1Rocket.update();
+        
 
         // check collisions
         if (this.checkCollision(this.p1Rocket, this.shipA)){
