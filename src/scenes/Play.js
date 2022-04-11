@@ -130,7 +130,6 @@ class Play extends Phaser.Scene {
     }
 
     shipExplode(ship){
-        //hide ship
         ship.alpha = 0;
 
         //make explosion at ship location
