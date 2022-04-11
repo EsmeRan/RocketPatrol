@@ -1,4 +1,3 @@
-console.log("hello from main.js");
 
 let config = { 
     type: Phaser.CANVAS, 
@@ -15,8 +14,6 @@ let borderPadding = borderUISize / 3;
 
 let game =  new Phaser.Game(config);
 
-// revisit how to make the images in vs at home to make a 'rocket' image
-// in general look back at lecture to get rocket and ship code in
 
 
 
