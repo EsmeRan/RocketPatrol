@@ -7,7 +7,8 @@ class Ship extends Phaser.GameObjects.Sprite {
     }
 
     update(){
-        this.x -= 5;
+        this.moveSpeed = game.settings.spaceshipSpeed;
+        this.x -= this.moveSpeed;
 
         if(this.x < 0){
             this.reset();
